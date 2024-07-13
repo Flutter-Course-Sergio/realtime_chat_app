@@ -5,13 +5,15 @@ class CustomInput extends StatelessWidget {
   final bool obscureText;
   final IconData prefixIcon;
   final String hintText;
+  final TextEditingController textController;
 
   const CustomInput(
       {super.key,
-      required this.keyboardType,
-      required this.obscureText,
+      this.keyboardType = TextInputType.text,
+      this.obscureText = false,
       required this.prefixIcon,
-      required this.hintText});
+      required this.hintText,
+      required this.textController});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class CustomInput extends StatelessWidget {
         autocorrect: false,
         keyboardType: keyboardType,
         obscureText: obscureText,
+        controller: textController,
         decoration: InputDecoration(
             prefixIcon: Icon(prefixIcon),
             focusedBorder: InputBorder.none,
