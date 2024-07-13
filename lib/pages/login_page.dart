@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import '../widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -60,14 +63,28 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
-          TextField(),
-          TextField(),
-          ElevatedButton(
-            onPressed: () {},
-            child: null,
+          CustomInput(
+            hintText: 'Email',
+            keyboardType: TextInputType.emailAddress,
+            obscureText: false,
+            prefixIcon: Icons.email_outlined,
+          ),
+          CustomInput(
+            hintText: 'Contraseña',
+            keyboardType: TextInputType.text,
+            obscureText: true,
+            prefixIcon: Icons.lock_outlined,
           )
+
+          // TODO: Crear boton
+          // ElevatedButton(
+          //   onPressed: () {},
+          //   child: null,
+          // )
         ],
       ),
     );
