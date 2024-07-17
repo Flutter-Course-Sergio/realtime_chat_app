@@ -55,9 +55,9 @@ class __FormState extends State<_Form> {
             obscureText: true,
             textController: passwordController,
           ),
-          ElevatedButton(
+          BlueButton(
+            buttonText: 'Ingrese',
             onPressed: () {},
-            child: null,
           )
         ],
       ),
