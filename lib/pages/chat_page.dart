@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/widgets.dart';
+
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
@@ -13,6 +15,15 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final textController = TextEditingController();
   final focusNode = FocusNode();
+
+  List<ChatMessage> messages = [
+    ChatMessage(id: '123', message: 'Hola mundo'),
+    ChatMessage(id: '123', message: 'Hola mundo'),
+    ChatMessage(id: '1231', message: 'Hola mundo'),
+    ChatMessage(id: '123', message: 'Hola mundo'),
+    ChatMessage(id: '1233', message: 'Hola mundo'),
+    ChatMessage(id: '123', message: 'Hola mundo'),
+  ];
 
   bool isTyping = false;
 
@@ -45,7 +56,8 @@ class _ChatPageState extends State<ChatPage> {
               Flexible(
                   child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemBuilder: (_, i) => Text(i.toString()),
+                itemCount: messages.length,
+                itemBuilder: (_, i) => messages[i],
                 reverse: true,
               )),
               const Divider(),
@@ -103,12 +115,15 @@ class _ChatPageState extends State<ChatPage> {
     ));
   }
 
-  _handleSubmit(String message) {
-    print(message);
+  _handleSubmit(String message) {    
+    textController.clear();
+    focusNode.requestFocus();
+
+    final newMessage = ChatMessage(message: message, id: '123');
+    messages.insert(0, newMessage);
+
     setState(() {
       isTyping = false;
     });
-    textController.clear();
-    focusNode.requestFocus();
   }
 }
