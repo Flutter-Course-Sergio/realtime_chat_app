@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Labels extends StatelessWidget {
-  const Labels({super.key});
+  final String route;
+  final String label1;
+  final String label2;
+
+  const Labels(
+      {super.key,
+      required this.route,
+      required this.label1,
+      required this.label2});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +21,13 @@ class Labels extends StatelessWidget {
 
     return Column(
       children: [
-        const Text('¿No tienes una cuenta?', style: textStyleLabel),
+        Text(label1, style: textStyleLabel),
         TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, route);
+            },
             child: Text(
-              'Crea una ahora!',
+              label2,
               style: textStyleButton,
             ))
       ],
