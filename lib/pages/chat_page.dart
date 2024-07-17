@@ -14,6 +14,8 @@ class _ChatPageState extends State<ChatPage> {
   final textController = TextEditingController();
   final focusNode = FocusNode();
 
+  bool isTyping = false;
+
   @override
   Widget build(BuildContext context) {
     const avatarTextStyle = TextStyle(fontSize: 12);
@@ -67,22 +69,34 @@ class _ChatPageState extends State<ChatPage> {
               controller: textController,
               onSubmitted: _handleSubmit,
               onChanged: (String content) {
-                // TODO: cuando hay un valor para poder postear
+                setState(() {
+                  isTyping = content.trim().isNotEmpty ? true : false;
+                });
               },
-              decoration: InputDecoration.collapsed(hintText: 'Enviar mensaje'),
+              decoration:
+                  const InputDecoration.collapsed(hintText: 'Enviar mensaje'),
               focusNode: focusNode,
             ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 4),
             child: Platform.isIOS
-                ? CupertinoButton(child: Text('Enviar'), onPressed: () {})
-                : IconButton.filled(
-                    onPressed: () {},
-                    style: IconButton.styleFrom(backgroundColor: Colors.blue),
-                    icon: const Icon(
-                      Icons.send,
-                    )),
+                ? CupertinoButton(
+                    onPressed: isTyping
+                        ? () => _handleSubmit(textController.text.trim())
+                        : null,
+                    child: const Text('Enviar'),
+                  )
+                : IconTheme(
+                    data: IconThemeData(color: Colors.blue[400]),
+                    child: IconButton(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        onPressed: isTyping
+                            ? () => _handleSubmit(textController.text.trim())
+                            : null,
+                        icon: const Icon(Icons.send)),
+                  ),
           )
         ],
       ),
@@ -91,6 +105,9 @@ class _ChatPageState extends State<ChatPage> {
 
   _handleSubmit(String message) {
     print(message);
+    setState(() {
+      isTyping = false;
+    });
     textController.clear();
     focusNode.requestFocus();
   }
