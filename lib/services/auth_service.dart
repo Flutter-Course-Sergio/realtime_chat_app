@@ -7,8 +7,18 @@ import '../models/models.dart';
 
 class AuthService with ChangeNotifier {
   late User user;
+  bool _isAuthenticating = false;
+
+  bool get isAuthenticating => _isAuthenticating;
+
+  set isAuthenticating(bool value) {
+    _isAuthenticating = value;
+    notifyListeners();
+  }
 
   Future login(String email, String password) async {
+    isAuthenticating = true;
+
     final data = {
       'email': email,
       'password': password,
@@ -24,5 +34,7 @@ class AuthService with ChangeNotifier {
       final loginResponse = loginResponseFromJson(resp.body);
       user = loginResponse.user;
     }
+
+    isAuthenticating = false;
   }
 }

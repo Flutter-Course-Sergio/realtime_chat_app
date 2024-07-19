@@ -54,6 +54,8 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -73,11 +75,13 @@ class __FormState extends State<_Form> {
           ),
           BlueButton(
             buttonText: 'Ingrese',
-            onPressed: () {
-              final authService =
-                  Provider.of<AuthService>(context, listen: false);
-              authService.login(emailController.text, passwordController.text);
-            },
+            onPressed: authService.isAuthenticating
+                ? null
+                : () {
+                    FocusScope.of(context).unfocus();
+                    authService.login(emailController.text.trim(),
+                        passwordController.text.trim());
+                  },
           )
         ],
       ),
