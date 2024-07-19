@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
       providers: [ChangeNotifierProvider(create: (_) => AuthService())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: 'login',
+        initialRoute: 'loading',
         routes: appRoutes,
       ),
     );

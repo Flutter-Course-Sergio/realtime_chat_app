@@ -3,3 +3,4 @@ export 'logo.dart';
 export 'labels.dart';
 export 'blue_button.dart';
 export 'chat_message.dart';
+export 'custom_loader.dart';

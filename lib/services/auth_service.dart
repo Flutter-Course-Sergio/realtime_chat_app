@@ -92,6 +92,27 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  Future<bool> isTokenValid() async {
+    final token = await _storage.read(key: 'token');
+
+    final url = Uri.https(Environment.apiUrl, '/api/auth/renew');
+
+    final resp = await http.get(url, headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    });
+
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      user = loginResponse.user;
+      await _saveToken(loginResponse.token);
+      return true;
+    } else {
+      logout();
+      return false;
+    }
+  }
+
   Future _saveToken(String token) async {
     return await _storage.write(key: 'token', value: token);
   }
