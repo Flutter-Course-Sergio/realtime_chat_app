@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/helpers.dart';
 import '../services/services.dart';
 import '../widgets/widgets.dart';
 
@@ -77,10 +78,20 @@ class __FormState extends State<_Form> {
             buttonText: 'Ingrese',
             onPressed: authService.isAuthenticating
                 ? null
-                : () {
+                : () async {
                     FocusScope.of(context).unfocus();
-                    authService.login(emailController.text.trim(),
-                        passwordController.text.trim());
+                    await authService
+                        .login(emailController.text.trim(),
+                            passwordController.text.trim())
+                        .then((login) => {
+                              if (login)
+                                {}
+                              else
+                                {
+                                  showAlert(context, 'Login Error',
+                                      'Revise sus credenciales')
+                                }
+                            });
                   },
           )
         ],
