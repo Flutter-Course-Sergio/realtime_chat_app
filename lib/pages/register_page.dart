@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../helpers/helpers.dart';
+import '../services/services.dart';
 import '../widgets/widgets.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -51,6 +54,8 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -75,7 +80,25 @@ class __FormState extends State<_Form> {
           ),
           BlueButton(
             buttonText: 'Registrar',
-            onPressed: () {},
+            onPressed: authService.isRegistering
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    await authService
+                        .register(
+                            nameController.text.trim(),
+                            emailController.text.trim(),
+                            passwordController.text.trim())
+                        .then((register) => {
+                              if (register == true)
+                                {
+                                  Navigator.pushReplacementNamed(
+                                      context, 'users')
+                                }
+                              else
+                                {showAlert(context, 'Register Error', register)}
+                            });
+                  },
           )
         ],
       ),

@@ -10,11 +10,18 @@ class AuthService with ChangeNotifier {
   late User user;
   final _storage = const FlutterSecureStorage();
   bool _isAuthenticating = false;
+  bool _isRegisteting = false;
 
   bool get isAuthenticating => _isAuthenticating;
+  bool get isRegistering => _isRegisteting;
 
   set isAuthenticating(bool value) {
     _isAuthenticating = value;
+    notifyListeners();
+  }
+
+  set isRegistering(bool value) {
+    _isRegisteting = value;
     notifyListeners();
   }
 
@@ -54,6 +61,34 @@ class AuthService with ChangeNotifier {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future register(String name, String email, String password) async {
+    isRegistering = true;
+
+    final data = {
+      'name': name,
+      'email': email,
+      'password': password,
+    };
+
+    final url = Uri.https(Environment.apiUrl, '/api/auth/new');
+
+    final resp = await http.post(url, body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+    });
+
+    isRegistering = false;
+
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      user = loginResponse.user;
+      await _saveToken(loginResponse.token);
+      return true;
+    } else {
+      final respBody = jsonDecode(resp.body);
+      return respBody['msg'];
     }
   }
 
