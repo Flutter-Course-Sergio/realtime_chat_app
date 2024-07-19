@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../models/user.dart';
+import '../services/services.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
@@ -22,18 +24,24 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.user;
+
     const textStyle = TextStyle(color: Colors.black54);
 
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Mi nombre',
+            user.name,
             style: textStyle,
           ),
           elevation: 1,
           backgroundColor: Colors.white,
           leading: IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await AuthService.deleteToken().then(
+                    (_) => Navigator.pushReplacementNamed(context, 'loading'));
+              },
               icon: const Icon(
                 Icons.exit_to_app_rounded,
                 color: Colors.black54,
