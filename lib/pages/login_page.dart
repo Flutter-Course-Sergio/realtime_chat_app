@@ -85,7 +85,10 @@ class __FormState extends State<_Form> {
                             passwordController.text.trim())
                         .then((login) => {
                               if (login)
-                                {}
+                                {
+                                  Navigator.pushReplacementNamed(
+                                      context, 'users')
+                                }
                               else
                                 {
                                   showAlert(context, 'Login Error',
