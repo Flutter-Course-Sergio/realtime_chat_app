@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:realtime_chat_app/routes/routes.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+import 'global/environment.dart';
+import 'routes/routes.dart';
+import 'services/services.dart';
+
+void main() async {
+  const isPrd = bool.fromEnvironment("dart.vm.product");
+
+  if (isPrd) {
+    await Environment.initPrdEnvironment();
+  } else {
+    await Environment.initLocalEnvironment();
+  }
+
   runApp(const MainApp());
 }
 
@@ -10,10 +22,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: 'chat',
-      routes: appRoutes,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthService())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'login',
+        routes: appRoutes,
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../services/services.dart';
 import '../widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
@@ -20,7 +22,9 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Logo(title: 'Messenger',),
+                  const Logo(
+                    title: 'Messenger',
+                  ),
                   _Form(),
                   const Labels(
                     route: 'register',
@@ -69,7 +73,11 @@ class __FormState extends State<_Form> {
           ),
           BlueButton(
             buttonText: 'Ingrese',
-            onPressed: () {},
+            onPressed: () {
+              final authService =
+                  Provider.of<AuthService>(context, listen: false);
+              authService.login(emailController.text, passwordController.text);
+            },
           )
         ],
       ),
