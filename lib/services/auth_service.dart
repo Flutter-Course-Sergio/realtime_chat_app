@@ -1,11 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../global/environment.dart';
+import '../models/models.dart';
 
 class AuthService with ChangeNotifier {
+  late User user;
+
   Future login(String email, String password) async {
     final data = {
       'email': email,
@@ -18,6 +20,9 @@ class AuthService with ChangeNotifier {
       'Content-Type': 'application/json',
     });
 
-    print(resp.body);
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      user = loginResponse.user;
+    }
   }
 }
