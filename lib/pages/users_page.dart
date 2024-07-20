@@ -25,6 +25,8 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+
     final user = authService.user;
 
     const textStyle = TextStyle(color: Colors.black54);
@@ -39,6 +41,7 @@ class _UsersPageState extends State<UsersPage> {
           backgroundColor: Colors.white,
           leading: IconButton(
               onPressed: () async {
+                socketService.disconnect();
                 await AuthService.deleteToken().then(
                     (_) => Navigator.pushReplacementNamed(context, 'loading'));
               },
