@@ -13,14 +13,17 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
+  final usersService = UserService();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  final users = [
-    User(online: true, email: 'test1@test.com', name: 'Abigail', uid: ''),
-    User(online: true, email: 'test2@test.com', name: 'Sergio', uid: ''),
-    User(online: false, email: 'test3@test.com', name: 'Karen', uid: ''),
-  ];
+  List<User> users = [];
+
+  @override
+  void initState() {
+    _loadUsers();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +98,8 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   _loadUsers() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    users = await usersService.getUsers();
+    setState(() {});
     refreshController.refreshCompleted();
   }
 }
