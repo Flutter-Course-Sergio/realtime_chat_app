@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../services/services.dart';
 import '../widgets/widgets.dart';
 
 class ChatPage extends StatefulWidget {
@@ -25,6 +27,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     const avatarTextStyle = TextStyle(fontSize: 12);
     const usernameTextStyle = TextStyle(color: Colors.black54, fontSize: 16);
 
+    final chatService = Provider.of<ChatService>(context);
+    final userFor = chatService.userFor;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -33,33 +38,32 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             children: [
               CircleAvatar(
                 backgroundColor: Colors.blue[100],
-                child: Text('TE', style: avatarTextStyle),
+                child:
+                    Text(userFor.name.substring(0, 2), style: avatarTextStyle),
               ),
               const SizedBox(width: 10),
               Text(
-                'Abigail Amador',
+                userFor.name,
                 style: usernameTextStyle,
               )
             ],
           ),
         ),
-        body: Container(
-          child: Column(
-            children: [
-              Flexible(
-                  child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: messages.length,
-                itemBuilder: (_, i) => messages[i],
-                reverse: true,
-              )),
-              const Divider(),
-              Container(
-                color: Colors.white,
-                child: _inputChat(),
-              )
-            ],
-          ),
+        body: Column(
+          children: [
+            Flexible(
+                child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: messages.length,
+              itemBuilder: (_, i) => messages[i],
+              reverse: true,
+            )),
+            const Divider(),
+            Container(
+              color: Colors.white,
+              child: _inputChat(),
+            )
+          ],
         ));
   }
 
