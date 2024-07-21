@@ -18,16 +18,25 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final textController = TextEditingController();
   final focusNode = FocusNode();
 
-  List<ChatMessage> messages = [];
+  late ChatService chatService;
+  late SocketService socketService;
+  late AuthService authService;
 
+  List<ChatMessage> messages = [];
   bool isTyping = false;
+
+  @override
+  void initState() {
+    super.initState();
+    chatService = Provider.of<ChatService>(context, listen: false);
+    socketService = Provider.of<SocketService>(context, listen: false);
+    authService = Provider.of<AuthService>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     const avatarTextStyle = TextStyle(fontSize: 12);
     const usernameTextStyle = TextStyle(color: Colors.black54, fontSize: 16);
-
-    final chatService = Provider.of<ChatService>(context);
     final userFor = chatService.userFor;
 
     return Scaffold(
@@ -113,7 +122,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   _handleSubmit(String message) {
-    if (messages.isEmpty) return;
+    if (message.isEmpty) return;
 
     textController.clear();
     focusNode.requestFocus();
@@ -129,6 +138,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
     setState(() {
       isTyping = false;
+    });
+
+    socketService.emit('private-msg', {
+      'from': authService.user.uid,
+      'to': chatService.userFor.uid,
+      'message': message
     });
   }
 
